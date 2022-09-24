@@ -1,1 +1,19 @@
-<p>register works!</p>
+<h1>Register</h1>
+<form (ngSubmit)="onRegister()" [formGroup]="registerForm" id="registerForm">
+  <div>
+    <label for="username"
+      >Username <input type="text" formControlName="username" id="username"
+    /></label>
+  </div>
+  <div>
+    <label for="email"
+      >Email
+      <input type="text" formControlName="email" id="email" />
+    </label>
+  </div>
+  <div>
+    <label for="password">Password</label>
+    <input type="password" formControlName="password" id="password" />
+  </div>
+  <button type="submit" [disabled]="registerForm.invalid">Register</button>
+</form>
