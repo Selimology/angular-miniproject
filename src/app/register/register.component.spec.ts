@@ -1,21 +1,33 @@
+import { HttpClient } from '@angular/common/http';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PostService } from '../service/post.service';
 import { RegisterComponent } from './register.component';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
+  let service: PostService;
+  let httpClient: HttpClient;
+  let httpMock: HttpTestingController;
   let fixture: ComponentFixture<RegisterComponent>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RegisterComponent],
-      imports: [FormsModule, ReactiveFormsModule],
+      imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule],
+      providers: [PostService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     component.ngOnInit();
     fixture.detectChanges();
+    service = TestBed.inject(PostService);
+    httpClient = TestBed.inject(HttpClient);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   it('should create', () => {
@@ -59,6 +71,17 @@ describe('RegisterComponent', () => {
       expect(email.valid).toBeFalsy();
       email.setValue('');
       expect(email.hasError('required')).toBeTruthy();
+    });
+
+    it('send username,password,email to server', () => {
+      const req = httpMock.expectOne('/api/1.0/users');
+      const requestMethod = req.request.method === 'POST';
+      const requestBody = req.request.body;
+      expect(requestBody).toEqual({
+        username: 'test',
+        password: 'test',
+        email: 'test@test.com',
+      });
     });
   });
 });

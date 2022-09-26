@@ -1,5 +1,10 @@
 <h1>Register</h1>
-<form (ngSubmit)="onRegister()" [formGroup]="registerForm" id="registerForm">
+<form
+  (ngSubmit)="onSubmit(registerForm.value)"
+  [formGroup]="registerForm"
+  (click)="($event.preventDefault)"
+  id="registerForm"
+>
   <div>
     <label for="username"
       >Username <input type="text" formControlName="username" id="username"
